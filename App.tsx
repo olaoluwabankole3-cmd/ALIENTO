@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, StatusBar, StyleProp, StyleSheet, Switch, Text, TextInput, View, ViewStyle } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type Page = "welcome" | "home" | "voice" | "followup" | "summary" | "consent" | "pending" | "careplan" | "pharmacy" | "order" | "delivery" | "dropzone" | "mycare" | "profile" | "urgent";
@@ -36,7 +36,7 @@ function Btn({ title, onPress, variant = "primary", disabled = false }: { title:
     <Text style={[s.buttonText, ({ primary: s.buttonText_primary, secondary: s.buttonText_secondary, outline: s.buttonText_outline, dark: s.buttonText_dark, danger: s.buttonText_danger } as const)[variant]]}>{title}</Text>
   </Pressable>;
 }
-function Card({ children, style }: { children: React.ReactNode; style?: object }) { return <View style={[s.card, style]}>{children}</View>; }
+function Card({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle> }) { return <View style={[s.card, style]}>{children}</View>; }
 function Tag({ children, tone = "mint" }: { children: React.ReactNode; tone?: "mint" | "violet" | "danger" | "dark" | "neutral" }) {
   return <View style={[s.tag, { backgroundColor: tone === "violet" ? C.aiMist : tone === "danger" ? C.dangerSoft : tone === "dark" ? "#17413B" : tone === "neutral" ? "#EEF3F0" : C.mist }]}>
     <Text style={[s.tagText, { color: tone === "violet" ? C.violet : tone === "danger" ? C.danger : tone === "dark" ? C.mint : tone === "neutral" ? C.muted : C.inkSoft }]}>{children}</Text>
