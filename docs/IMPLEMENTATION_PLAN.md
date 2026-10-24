@@ -1,96 +1,83 @@
 # ALIENTO — Implementation Plan
 
-**Current phase:** Phase 1 — product definition and design  
-**Implementation status:** Not started  
-**Repository:** `olaoluwabankole3-cmd/ALIENTO`
+**Platform:** Android first, iOS later  
+**App framework:** React Native + Expo + TypeScript  
+**Implementation branch:** `feat/android-patient-app-20261024`  
+**Current milestone:** Initial UI prototype and app configuration committed; validation pending
 
-## Gate 0 — Product and design agreement
+## Gate 0 — Design agreement
 
-Before coding the app:
-- Review and approve the patient journey in the [Figma design](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2).
-- Finish visual QA for all 14 patient artboards.
-- Audit and correct all clickable prototype interactions, including back navigation and bottom navigation.
-- Finalise the consent, identity verification, clinical-review and no-prescription branches.
-- Confirm the selected 3D logo and export production-ready application assets.
-- Review key journeys with prospective users and, where possible, qualified clinical/pharmacy advisors.
+- [x] User approved the current visual direction and patient screen designs.
+- [x] Core journeys and safety requirements documented.
+- [x] Initial native-screen implementation created in `App.tsx`.
+- [ ] Review visual fidelity against the full 14-screen Figma file.
+- [ ] QA every route, back action, tab, field validation, accessibility and screen size.
+- [ ] Replace the in-code logo approximation with the approved production-resolution logo asset.
 
-**Exit criterion:** A reviewer can follow the primary patient journey in Figma without dead ends or misleading status changes.
+**Design source:** [ALIENTO — Android Patient in Figma](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2)
 
 ## Gate 1 — Mobile app foundation
 
-Proposed stack: React Native + Expo + TypeScript, pending confirmation at implementation time.
+Committed so far:
+- Expo app manifest and package scripts
+- TypeScript configuration
+- Initial theme, reusable UI helpers and patient journeys, currently in a single `App.tsx`
+- Demo-only flag values in `app.json`
+- Local in-memory sample data with explicit service limitations
 
-Work:
-- Initialise Expo project with strict TypeScript and predictable folder structure.
-- Configure linting, formatting, environment validation and type-check/build scripts.
-- Implement design tokens and typography from the approved Figma design.
-- Build shared mobile primitives: buttons, inputs, status labels, cards, navigation and voice-interaction states.
-- Add accessible sizing, safe-area behaviour, keyboard handling and responsive layouts.
-- Add an explicit demo-mode flag so simulated workflows cannot be mistaken for live services.
+Next:
+- Install dependencies and run `npm run typecheck` and `npm run doctor`
+- Verify the app on an Android device/emulator
+- Split the app into reusable files and add focused tests where useful
+- Add the approved 3D logo as a local asset and ensure it is correctly sized
+- Check navigation, keyboard behaviour, screen reader labels, contrast and responsive layouts
 
-Acceptance:
-- Android development build launches successfully.
-- Main screens render from reusable components, not duplicated hard-coded styling.
-- No live provider secret is bundled in the mobile app.
+The implementation environment did not have dependable package-registry access, so successful dependency installation or an Android build has **not** been verified yet.
 
-## Gate 2 — Patient experience (demo data)
+## Gate 2 — Patient experience with demo data
 
-Build in this order:
-1. Welcome, entry and language preferences
-2. Voice/text intake UI, transcript editing and simulated listening states
-3. Follow-up questions and red-flag presentation
-4. Editable health brief
-5. Account verification UI and explicit consent
-6. Clinical request status
-7. Clinician-led consultation/care-plan concept
-8. Prescription and pharmacy order concepts
-9. Order review and price transparency
-10. Simulated future drone tracking and drop-zone selection
-11. My Care, profile and privacy preferences
+- [x] Welcome and home
+- [x] Text intake screen with editable sample transcript
+- [x] Follow-up questions and safety-warning path
+- [x] Editable patient-reported health brief
+- [x] Account details and explicit consent UI
+- [x] Simulated clinical-review state
+- [x] Consultation/care-plan concept with no-medicine route
+- [x] Prescription/pharmacy concept and order review
+- [x] Simulated delivery tracking and preferred handoff spot concept
+- [x] My Care and profile/preferences
+- [ ] Device testing, interaction QA, visual comparison and accessibility checks
 
-Acceptance:
-- Each primary action has a meaningful destination and loading/error/empty states.
-- Demo content is clearly labelled.
-- No screen claims that a real clinician, pharmacy, payment, camera or drone is connected unless that integration exists.
+All screens above are prototype UI only. A button or status screen does not mean a service is connected.
 
-## Gate 3 — Backend and identity design
+## Gate 3 — Product backend and identity
 
-Choose architecture only after product requirements and available partner constraints are reviewed.
+Not started. Decide the backend, authentication, identity verification and data architecture only after requirements and partner constraints are reviewed.
 
-Potential work:
-- Authentication, identity verification and consent receipts
-- Database model and per-user/role authorisation
-- Patient records, case/workflow status, clinician review, prescription and pharmacy order references
-- Audit events for sensitive access and consequential actions
-- Server-side AI gateway with schema validation, request limits, red-flag handling and provider abstraction
-- Secure object storage and retention/deletion policy
+Required before real patient records are created or shared:
+- Authentication and verifiable account lifecycle
+- Consent receipt/versioning, withdrawal handling and a defined retention/deletion process
+- Per-patient and role-based authorisation enforced server-side
+- Auditable access to sensitive records and consequential actions
+- Secure storage, minimal collection, backups and incident-response procedures
+- Automated authorisation tests proving cross-patient access is blocked
 
-Acceptance:
-- Row-level or equivalent authorisation tests prove one patient cannot access another patient's records.
-- Clinical and pharmacy roles can only access their authorised workflows.
-- Secrets and privileged calls remain server-side.
-- AI outputs are schema-validated and labelled as support for—not a replacement for—clinical decisions.
+No provider API key or privileged secret should be bundled into the mobile app.
 
-## Gate 4 — Clinical and pharmacy pilot readiness
+## Gate 4 — Governed AI and clinical workflow
 
-- Secure review by qualified clinicians and pharmacy partners
-- Operational policies for consultation, prescription validity, dispensing, unavailable stock, substitutions, follow-up, complaints and refunds
-- Required privacy, data protection and health-sector compliance assessment
-- Incident response, audit review and support processes
-- Small controlled partner pilot before broader availability
+Not started. AI may organise patient-reported information, ask bounded follow-up questions, translate/simplify language and prepare a clinician-facing brief. It must not independently diagnose, prescribe or make consequential treatment decisions.
 
-## Gate 5 — Drone R&D and integration
+A qualified clinician must own assessment and care decisions. Emergency warnings must not be presented as a diagnosis or a substitute for urgent in-person care. Appointment requests remain pending until a provider confirms them.
 
-This is a separate engineering stream and a later launch dependency:
-- Define aircraft and secure-pod payload requirements
-- Research eligible hardware and authorised delivery partners
-- Develop the operator integration contract and mission-state model
-- Design target-selection, camera privacy, stale-stream handling, reject/redirect and failed-handoff flows
-- Conduct simulation and controlled testing with appropriate expertise and approvals
-- Integrate only after a real operator, API and approved operating model are identified
+## Gate 5 — Licensed pharmacy, payment and fulfilment
 
-The drone must retain independent safety controls; a patient-selected point is a preferred destination, not a command to pilot or descend.
+Not started. Real fulfilment requires the applicable prescription validation and licensed-pharmacy workflow, availability and final price confirmation, order-state handling, payment reconciliation and exception/refund processes. Patients must not be pressured into buying medicine.
 
-## Gate 6 — Launch readiness
+## Gate 6 — Future delivery research
 
-Launch only after the product, clinical and pharmacy operations, data protection controls, payment fulfilment and delivery operating model are validated for the intended region. A visual prototype or hackathon demo is not launch authorisation.
+The delivery tracking and camera/drop-zone screens remain simulated concepts. No aircraft, live camera, GPS or operator is connected. Any real drone work is a separate future engineering and approval workstream. A patient-selected location is a preferred target, not a flight or descent command; independent operator and safety controls must decide whether delivery can proceed.
+
+## Gate 7 — Pilot and launch readiness
+
+No production pilot is authorised by this prototype. Before a pilot: complete product and accessibility QA, qualified clinical/pharmacy review, data-protection/security assessment, support/incident procedures, integrations testing and required local approvals. Use a limited controlled pilot only after the real workflow is validated.
