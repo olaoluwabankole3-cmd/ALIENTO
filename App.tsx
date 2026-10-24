@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Image, Platform, Pressable, ScrollView, StatusBar, StyleProp, StyleSheet, Switch, Text, TextInput, View, ViewStyle } from "react-native";
+import { Image, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Switch, Text, TextInput, View } from "react-native";
+import type { StyleProp, ViewStyle } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type Page = "welcome" | "home" | "voice" | "followup" | "summary" | "consent" | "pending" | "careplan" | "pharmacy" | "order" | "delivery" | "dropzone" | "mycare" | "profile" | "urgent";
