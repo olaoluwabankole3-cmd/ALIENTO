@@ -8,8 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "android": {
-      "package": "com.aliento.patient",
-      "edgeToEdgeEnabled": true
+      "package": "com.aliento.patient"
     },
     "ios": {
       "bundleIdentifier": "com.aliento.patient"
