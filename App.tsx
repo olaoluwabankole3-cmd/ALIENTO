@@ -22,7 +22,9 @@ const initial: Data = {
   duration: "Since yesterday", vomiting: "No", severe: "No", notes: "", name: "", phone: "",
   saveConsent: false, aiAcknowledged: false, address: "", spot: "Front entrance", notifications: true,
 };
-const urgentCopy = "If you have severe difficulty breathing, severe chest pain, heavy bleeding, fainting, confusion, or another life-threatening symptom, seek urgent in-person medical care or contact local emergency services now. Do not wait for this afunction Logo({ size = 64 }: { size?: number }) {
+const urgentCopy = "If you have severe difficulty breathing, severe chest pain, heavy bleeding, fainting, confusion, or another life-threatening symptom, seek urgent in-person medical care or contact local emergency services now. Do not wait for this app.";
+
+function Logo({ size = 64 }: { size?: number }) {
   return <View accessibilityLabel="ALIENTO brand mark" style={[s.logo, { width: size, height: size, borderRadius: size * 0.24 }]}>
     <Image source={require("./assets/aliento-mark.jpg")} accessibilityLabel="ALIENTO emerald 3D brand artwork" resizeMode="cover" style={StyleSheet.absoluteFillObject} />
   </View>;
