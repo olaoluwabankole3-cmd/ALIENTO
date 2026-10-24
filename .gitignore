@@ -1,0 +1,27 @@
+# dependencies
+node_modules/
+
+# Expo generated files
+.expo/
+web-build/
+expo-env.d.ts
+
+# Native build outputs (generated when native projects are created)
+android/
+ios/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# build outputs / coverage
+dist/
+coverage/
+*.tsbuildinfo
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
