@@ -26,7 +26,7 @@ const urgentCopy = "If you have severe difficulty breathing, severe chest pain, 
 
 function Logo({ size = 64 }: { size?: number }) {
   return <View accessibilityLabel="ALIENTO brand mark" style={[s.logo, { width: size, height: size, borderRadius: size * 0.24 }]}>
-    <Image source={require("./assets/aliento-mark.jpg")} accessibilityLabel="ALIENTO emerald 3D brand artwork" resizeMode="cover" style={StyleSheet.absoluteFillObject} />
+    <Image source={require("./assets/aliento-mark.jpg")} accessibilityLabel="ALIENTO emerald 3D brand artwork" resizeMode="cover" style={StyleSheet.absoluteFill} />
   </View>;
 }
 function Btn({ title, onPress, variant = "primary", disabled = false }: { title: string; onPress: () => void; variant?: "primary" | "secondary" | "outline" | "dark" | "danger"; disabled?: boolean }) {
