@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Platform, Pressable, ScrollView, StatusBar, StyleProp, StyleSheet, Switch, Text, TextInput, View, ViewStyle } from "react-native";
+import { Image, Platform, Pressable, ScrollView, StatusBar, StyleProp, StyleSheet, Switch, Text, TextInput, View, ViewStyle } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type Page = "welcome" | "home" | "voice" | "followup" | "summary" | "consent" | "pending" | "careplan" | "pharmacy" | "order" | "delivery" | "dropzone" | "mycare" | "profile" | "urgent";
@@ -21,14 +21,9 @@ const initial: Data = {
   duration: "Since yesterday", vomiting: "No", severe: "No", notes: "", name: "", phone: "",
   saveConsent: false, aiAcknowledged: false, address: "", spot: "Front entrance", notifications: true,
 };
-const urgentCopy = "If you have severe difficulty breathing, severe chest pain, heavy bleeding, fainting, confusion, or another life-threatening symptom, seek urgent in-person medical care or contact local emergency services now. Do not wait for this app.";
-
-function Logo({ size = 64 }: { size?: number }) {
+const urgentCopy = "If you have severe difficulty breathing, severe chest pain, heavy bleeding, fainting, confusion, or another life-threatening symptom, seek urgent in-person medical care or contact local emergency services now. Do not wait for this afunction Logo({ size = 64 }: { size?: number }) {
   return <View accessibilityLabel="ALIENTO brand mark" style={[s.logo, { width: size, height: size, borderRadius: size * 0.24 }]}>
-    <View style={[s.ribbon, { width: size * 0.14, height: size * 0.67, transform: [{ rotate: "27deg" }, { translateX: -size * 0.11 }] }]} />
-    <View style={[s.ribbon, { width: size * 0.14, height: size * 0.67, transform: [{ rotate: "-27deg" }, { translateX: size * 0.11 }], backgroundColor: C.lime }]} />
-    <View style={[s.ribbonCross, { width: size * 0.43, height: size * 0.09, top: size * 0.56 }]} />
-    <View style={s.logoGlow} />
+    <Image source={require("./assets/aliento-mark.jpg")} accessibilityLabel="ALIENTO emerald 3D brand artwork" resizeMode="cover" style={StyleSheet.absoluteFillObject} />
   </View>;
 }
 function Btn({ title, onPress, variant = "primary", disabled = false }: { title: string; onPress: () => void; variant?: "primary" | "secondary" | "outline" | "dark" | "danger"; disabled?: boolean }) {
