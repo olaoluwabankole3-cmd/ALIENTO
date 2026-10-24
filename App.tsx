@@ -32,8 +32,8 @@ function Logo({ size = 64 }: { size?: number }) {
   </View>;
 }
 function Btn({ title, onPress, variant = "primary", disabled = false }: { title: string; onPress: () => void; variant?: "primary" | "secondary" | "outline" | "dark" | "danger"; disabled?: boolean }) {
-  return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress} style={({ pressed }) => [s.button, s["button_" + variant], disabled && s.disabled, pressed && !disabled && s.pressed]}>
-    <Text style={[s.buttonText, s["buttonText_" + variant]]}>{title}</Text>
+  return <Pressable accessibilityRole="button" disabled={disabled} onPress={onPress} style={({ pressed }) => [s.button, ({ primary: s.button_primary, secondary: s.button_secondary, outline: s.button_outline, dark: s.button_dark, danger: s.button_danger } as const)[variant], disabled && s.disabled, pressed && !disabled && s.pressed]}>
+    <Text style={[s.buttonText, ({ primary: s.buttonText_primary, secondary: s.buttonText_secondary, outline: s.buttonText_outline, dark: s.buttonText_dark, danger: s.buttonText_danger } as const)[variant]]}>{title}</Text>
   </Pressable>;
 }
 function Card({ children, style }: { children: React.ReactNode; style?: object }) { return <View style={[s.card, style]}>{children}</View>; }
