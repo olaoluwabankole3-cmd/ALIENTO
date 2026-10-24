@@ -9,7 +9,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   typecheck:
@@ -19,19 +19,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Generate npm lockfile
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-      - name: Commit lockfile on feature branch if missing
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/android-patient-app-20261024'
-        run: |
-          if ! git ls-files --error-unmatch package-lock.json >/dev/null 2>&1; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add package-lock.json
-            git commit -m "chore: add npm lockfile"
-            git push
-          fi
-      - name: Install dependencies
+          cache: npm
+      - name: Install locked dependencies
         run: npm ci --no-audit --no-fund
       - name: TypeScript check
         run: npm run typecheck
