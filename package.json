@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "doctor": "expo-doctor"
+    "doctor": "expo-doctor",
+    "test": "node --test tests/decisions.test.mjs"
   },
   "dependencies": {
     "expo": "~57.0.31",
