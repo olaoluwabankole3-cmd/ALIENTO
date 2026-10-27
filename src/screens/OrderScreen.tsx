@@ -4,6 +4,7 @@ import { C } from "../theme/tokens";
 import s from "../theme/styles";
 import { BrandHeader, Btn, Card, Check, Choice, Divider, Field, Heading, Logo, Note, Status, Tag } from "../components/ui";
 import { initial, urgentCopy } from "../domain/patient";
+import type { Answer, Spot } from "../domain/patient";
 import { getFollowUpDestination, isConsentReady, isUrgentAnswer } from "../navigation/routes.mjs";
 import type { ScreenProps } from "./types";
 
