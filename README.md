@@ -6,34 +6,38 @@ ALIENTO is an Android-first, voice-first healthcare coordination app prototype. 
 
 ## Current build status
 
-The `feat/android-patient-app-20261024` branch contains the initial React Native + Expo + TypeScript UI prototype. The application uses local in-memory state and sample information only.
+The `feat/android-patient-app-20261024` branch contains the Android-first React Native + Expo + TypeScript prototype. It uses local in-memory state and sample information only.
 
-- Patient flow: welcome, home, text intake, follow-up questions, editable health brief and consent.
-- Care coordination: simulated review status, consultation/care-plan concept and pharmacy/order previews.
+- Patient journey: welcome, home, symptom text entry, follow-up, editable health brief and consent.
+- Care coordination: simulated review status, clinician-care-plan concept and pharmacy/order previews.
 - Personal space: My Care and profile/preferences.
-- Safety: urgent-care guidance and clear notices about unconnected services.
+- Safety: urgent-care guidance and notices about unconnected services.
 - Future concepts: delivery tracking and preferred handoff spot screens, explicitly marked as simulated.
+
+The code is organised into 15 screen files in `src/screens/`, shared UI components in `src/components/`, theme tokens and styles in `src/theme/`, demo state/types in `src/domain/`, and testable navigation decisions in `src/navigation/`. `App.tsx` coordinates navigation and shared state. The automated navigation/safety tests are in `tests/decisions.test.mjs`.
 
 The design source is [ALIENTO — Android Patient in Figma](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2).
 
 ## Run locally
 
-Use Node.js 22.13 or newer and npm. This branch includes a lockfile; use `npm ci` to install the exact dependency tree.
+Use Node.js 22.13 or newer and npm. Use the committed lockfile for repeatable installation.
 
 ```bash
 npm ci
+npm test
 npm run typecheck
 npm run doctor
 npx expo start
 ```
 
-Scan the QR code with an Expo Go installation compatible with this project's Expo SDK 57. The latest Play Store Expo Go may target a newer SDK; when versions differ, use the official compatible Expo Go release or set up a development build rather than changing dependencies ad hoc. Alternatively, run `npm run android` with an Android emulator and Android development tools configured.
+Scan the QR code with an Expo Go installation compatible with this project's Expo SDK 57. If the installed Expo Go version targets another SDK, use the official compatible Expo Go release or a development build rather than adding individual dependencies or upgrading the SDK ad hoc. Alternatively, run `npm run android` with an Android emulator and Android development tools configured.
 
 Useful commands:
 
 - `npm run start` — start the Expo development server
 - `npm run android` — open in an Android emulator
 - `npm run typecheck` — run TypeScript checks
+- `npm test` — test urgent guidance, follow-up routing, tab destinations and consent gating
 - `npm run doctor` — inspect common Expo project setup issues
 
 ## Safety and privacy boundaries

@@ -46,8 +46,9 @@ The map, delivery progress and camera-style display are decorative simulations. 
 
 ## Verification status
 
-- The user launched the app on an Android phone using an Expo Go version compatible with SDK 57 and reports completing a manual smoke test of the main patient journeys, navigation, keyboard behaviour and buttons.
-- GitHub Actions passed the clean locked dependency installation, TypeScript check, Android JavaScript export and Expo project diagnostics for the feature branch.
+- The user launched the original app on an Android phone using an Expo Go version compatible with SDK 57 and reports completing the first manual smoke test of the main patient journeys, navigation, keyboard behaviour and buttons.
+- The latest modular refactor passed GitHub Actions checks for clean locked installation, TypeScript, urgent/navigation/consent decision tests, Android JavaScript export and Expo diagnostics.
+- The refactored branch still needs to be reopened on the Android device and manually smoke-tested before the refactor is described as confirmed on-device.
 - The app has not been through a comprehensive visual-regression or accessibility audit.
 - A standalone Android release build, production backend, security assessment, real clinical/pharmacy testing and launch readiness have not been established by these checks.
 

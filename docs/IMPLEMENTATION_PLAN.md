@@ -3,16 +3,17 @@
 **Platform:** Android first, iOS later  
 **App framework:** React Native + Expo + TypeScript  
 **Implementation branch:** `feat/android-patient-app-20261024`  
-**Current milestone:** Interactive prototype running on the user's Android phone; the first manual core-journey smoke test has been reported complete.
+**Current milestone:** Modular Android prototype; the original UI passed the user's first device smoke test, and the refactor has passed automated checks. Device re-test after the refactor is next.
 
 ## Gate 0 — Design agreement and first device pass
 
 - [x] User approved the current visual direction and patient screen designs.
 - [x] Core journeys and safety requirements documented.
-- [x] Initial native-screen implementation created in `App.tsx`.
 - [x] Approved 3D logo included as a local asset.
-- [x] User launched the app on an Android phone using an Expo Go version compatible with SDK 57.
-- [x] User reports completing the core journey smoke-test checklist, including navigation, text editing, urgent guidance, consent screens, care-plan/order previews, profile screens, keyboard behaviour and checking for stuck buttons.
+- [x] User launched the original prototype on an Android phone using an Expo Go version compatible with SDK 57.
+- [x] User reports completing the core journey smoke-test checklist on that build, including navigation, text editing, urgent guidance, consent screens, care-plan/order previews, profile screens, keyboard behaviour and checking for stuck buttons.
+- [x] The existing screen markup and shared styles have been moved into separate modules on the feature branch without intentional visual redesign.
+- [ ] Re-open the refactored branch on the Android device and repeat the same journey checklist.
 - [ ] Review visual fidelity against the full 14-screen Figma file.
 - [ ] Complete a separate accessibility, contrast, small-screen and screen-reader review.
 - [ ] Test additional error, empty and interrupted states systematically.
@@ -21,21 +22,31 @@
 
 ## Gate 1 — Mobile app foundation
 
-Confirmed so far:
-- Expo app manifest, package scripts and TypeScript configuration
-- Approved 3D logo at `assets/aliento-mark.jpg`
-- Committed `package-lock.json` for repeatable dependency installation
-- Clean `npm ci`, TypeScript check, Android JavaScript export and Expo diagnostics passed in GitHub Actions
-- App started on a real Android phone in Expo Go compatible with the project's SDK 57
-- Demo-only flags and local in-memory sample data with explicit service limitations
+The app is now organised into:
+- `src/screens/` — 15 screen files for the patient journeys
+- `src/components/ui.tsx` — shared buttons, cards, tags, notes, fields, navigation elements and other reusable UI
+- `src/theme/tokens.ts` and `src/theme/styles.ts` — shared colours and style definitions
+- `src/domain/patient.ts` — page/data types and illustrative demo state
+- `src/navigation/routes.mjs` and its TypeScript declaration — testable urgent-guidance, follow-up, tab-navigation and consent decisions
+- `App.tsx` — central navigation state and screen composition
+- `tests/decisions.test.mjs` — automated checks for urgent-routing, tab destinations and consent gating
+
+GitHub Actions has passed for the latest code refactor:
+- Clean locked dependency installation (`npm ci`)
+- TypeScript check
+- Focused navigation and safety decision tests
+- Android JavaScript export
+- Expo project diagnostics
+
+The passing checks verify code and bundle consistency, but they do not replace a device re-test, visual comparison, accessibility audit or release build.
 
 Next:
-- Refactor the large `App.tsx` into clear screen, component, navigation and theme modules without changing the approved UI.
-- Add focused tests for critical navigation and safety-related UI branches.
+- Verify the refactored code on the same Android device.
+- Preserve the approved design while comparing all 14 Figma screens.
+- Expand tests around navigation history and error/empty states.
 - Review accessibility labels, contrast, keyboard behaviour and responsive layouts.
-- Continue the separate visual comparison against all 14 Figma frames.
 
-A standalone Android APK/release build, production backend, security assessment and comprehensive accessibility review have **not** been completed. The passing CI checks are not a substitute for these tasks.
+A standalone Android release build, production backend, security assessment and comprehensive accessibility review have **not** been completed.
 
 ## Gate 2 — Patient experience with demo data
 
@@ -49,8 +60,9 @@ A standalone Android APK/release build, production backend, security assessment 
 - [x] Prescription/pharmacy concept and order review
 - [x] Simulated delivery tracking and preferred handoff spot concept
 - [x] My Care and profile/preferences
-- [x] First user-reported Android device smoke test of the core journeys, navigation and keyboard/button behaviour
-- [ ] Detailed visual comparison, accessibility review and additional systematic error/empty-state testing
+- [x] First user-reported Android device smoke test of the original prototype's core patient journeys, navigation and keyboard/button behaviour
+- [ ] Repeat the device smoke test against the refactored build
+- [ ] Detailed visual comparison, accessibility review and systematic error/empty-state testing
 
 All screens above are prototype UI only. A button or status screen does not mean a service is connected.
 
