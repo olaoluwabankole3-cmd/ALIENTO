@@ -18,16 +18,16 @@ The design source is [ALIENTO — Android Patient in Figma](https://www.figma.co
 
 ## Run locally
 
-Use Node.js 22.13 or newer and npm.
+Use Node.js 22.13 or newer and npm. This branch includes a lockfile; use `npm ci` to install the exact dependency tree.
 
 ```bash
-npm install
-npx expo install --fix
+npm ci
 npm run typecheck
+npm run doctor
 npx expo start
 ```
 
-Scan the QR code with a compatible Expo Go installation, or run `npm run android` with an Android emulator and Android development tools configured. If the installed Expo Go version does not match the app SDK, follow Expo's SDK upgrade guidance or use a development build.
+Scan the QR code with an Expo Go installation compatible with this project's Expo SDK 57. The latest Play Store Expo Go may target a newer SDK; when versions differ, use the official compatible Expo Go release or set up a development build rather than changing dependencies ad hoc. Alternatively, run `npm run android` with an Android emulator and Android development tools configured.
 
 Useful commands:
 
@@ -55,4 +55,4 @@ Drone delivery and camera/drop-zone screens are visual concepts only. A patient-
 
 ## Before any pilot
 
-Run the mobile app on a real Android device, check every journey and empty/error/back-navigation state, validate accessibility and small-screen layouts, and complete security/privacy review. Backend, authentication, consent receipts, auditability, clinical and pharmacy workflows, and any delivery integration require separate design, implementation and qualified review before real users or patient data are involved.
+Complete the remaining visual, accessibility and error-state QA, then the required backend, authentication, consent, authorisation, auditability, clinical and pharmacy workflows, security/privacy reviews and applicable approvals. A prototype smoke test or passing CI checks do not establish that the service is ready for real users or patient data.
