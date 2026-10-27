@@ -3,36 +3,39 @@
 **Platform:** Android first, iOS later  
 **App framework:** React Native + Expo + TypeScript  
 **Implementation branch:** `feat/android-patient-app-20261024`  
-**Current milestone:** Initial UI prototype and app configuration committed; validation pending
+**Current milestone:** Interactive prototype running on the user's Android phone; the first manual core-journey smoke test has been reported complete.
 
-## Gate 0 — Design agreement
+## Gate 0 — Design agreement and first device pass
 
 - [x] User approved the current visual direction and patient screen designs.
 - [x] Core journeys and safety requirements documented.
 - [x] Initial native-screen implementation created in `App.tsx`.
+- [x] Approved 3D logo included as a local asset.
+- [x] User launched the app on an Android phone using an Expo Go version compatible with SDK 57.
+- [x] User reports completing the core journey smoke-test checklist, including navigation, text editing, urgent guidance, consent screens, care-plan/order previews, profile screens, keyboard behaviour and checking for stuck buttons.
 - [ ] Review visual fidelity against the full 14-screen Figma file.
-- [ ] QA every route, back action, tab, field validation, accessibility and screen size.
-- [ ] Replace the in-code logo approximation with the approved production-resolution logo asset.
+- [ ] Complete a separate accessibility, contrast, small-screen and screen-reader review.
+- [ ] Test additional error, empty and interrupted states systematically.
 
 **Design source:** [ALIENTO — Android Patient in Figma](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2)
 
 ## Gate 1 — Mobile app foundation
 
-Committed so far:
-- Expo app manifest and package scripts
-- TypeScript configuration
-- Initial theme, reusable UI helpers and patient journeys, currently in a single `App.tsx`
-- Demo-only flag values in `app.json`
-- Local in-memory sample data with explicit service limitations
+Confirmed so far:
+- Expo app manifest, package scripts and TypeScript configuration
+- Approved 3D logo at `assets/aliento-mark.jpg`
+- Committed `package-lock.json` for repeatable dependency installation
+- Clean `npm ci`, TypeScript check, Android JavaScript export and Expo diagnostics passed in GitHub Actions
+- App started on a real Android phone in Expo Go compatible with the project's SDK 57
+- Demo-only flags and local in-memory sample data with explicit service limitations
 
 Next:
-- Install dependencies and run `npm run typecheck` and `npm run doctor`
-- Verify the app on an Android device/emulator
-- Split the app into reusable files and add focused tests where useful
-- Add the approved 3D logo as a local asset and ensure it is correctly sized
-- Check navigation, keyboard behaviour, screen reader labels, contrast and responsive layouts
+- Refactor the large `App.tsx` into clear screen, component, navigation and theme modules without changing the approved UI.
+- Add focused tests for critical navigation and safety-related UI branches.
+- Review accessibility labels, contrast, keyboard behaviour and responsive layouts.
+- Continue the separate visual comparison against all 14 Figma frames.
 
-The implementation environment did not have dependable package-registry access, so successful dependency installation or an Android build has **not** been verified yet.
+A standalone Android APK/release build, production backend, security assessment and comprehensive accessibility review have **not** been completed. The passing CI checks are not a substitute for these tasks.
 
 ## Gate 2 — Patient experience with demo data
 
@@ -46,13 +49,14 @@ The implementation environment did not have dependable package-registry access, 
 - [x] Prescription/pharmacy concept and order review
 - [x] Simulated delivery tracking and preferred handoff spot concept
 - [x] My Care and profile/preferences
-- [ ] Device testing, interaction QA, visual comparison and accessibility checks
+- [x] First user-reported Android device smoke test of the core journeys, navigation and keyboard/button behaviour
+- [ ] Detailed visual comparison, accessibility review and additional systematic error/empty-state testing
 
 All screens above are prototype UI only. A button or status screen does not mean a service is connected.
 
 ## Gate 3 — Product backend and identity
 
-Not started. Decide the backend, authentication, identity verification and data architecture only after requirements and partner constraints are reviewed.
+Not started. Define requirements and partner constraints before selecting and implementing the backend, authentication, identity verification and data architecture.
 
 Required before real patient records are created or shared:
 - Authentication and verifiable account lifecycle
