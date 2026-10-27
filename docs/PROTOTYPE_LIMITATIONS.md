@@ -46,4 +46,9 @@ The map, delivery progress and camera-style display are decorative simulations. 
 
 ## Verification status
 
-The app source and configuration have been committed on a feature branch. Dependency installation, TypeScript checking, Android device testing and a production build have not yet been confirmed. Those checks must pass before the prototype is described as runnable or release-ready.
+- The user launched the app on an Android phone using an Expo Go version compatible with SDK 57 and reports completing a manual smoke test of the main patient journeys, navigation, keyboard behaviour and buttons.
+- GitHub Actions passed the clean locked dependency installation, TypeScript check, Android JavaScript export and Expo project diagnostics for the feature branch.
+- The app has not been through a comprehensive visual-regression or accessibility audit.
+- A standalone Android release build, production backend, security assessment, real clinical/pharmacy testing and launch readiness have not been established by these checks.
+
+Treat this as a demo prototype only. Do not enter real patient information or use it to coordinate real care.
