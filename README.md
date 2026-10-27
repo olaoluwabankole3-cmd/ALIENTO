@@ -56,6 +56,7 @@ Drone delivery and camera/drop-zone screens are visual concepts only. A patient-
 - [Android design specification](docs/ANDROID_DESIGN_SPEC.md)
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
 - [Prototype limitations](docs/PROTOTYPE_LIMITATIONS.md)
+- [Backend architecture proposal](docs/BACKEND_ARCHITECTURE.md)
 
 ## Before any pilot
 

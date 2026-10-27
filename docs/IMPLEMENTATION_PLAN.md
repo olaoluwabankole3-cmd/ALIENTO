@@ -68,17 +68,18 @@ All screens above are prototype UI only. A button or status screen does not mean
 
 ## Gate 3 — Product backend and identity
 
-Not started. Define requirements and partner constraints before selecting and implementing the backend, authentication, identity verification and data architecture.
+**Current status:** Architecture proposal documented; no ALIENTO Supabase project or live backend has been created or connected.
 
-Required before real patient records are created or shared:
-- Authentication and verifiable account lifecycle
-- Consent receipt/versioning, withdrawal handling and a defined retention/deletion process
-- Per-patient and role-based authorisation enforced server-side
-- Auditable access to sensitive records and consequential actions
-- Secure storage, minimal collection, backups and incident-response procedures
-- Automated authorisation tests proving cross-patient access is blocked
+- [x] Propose Supabase Postgres/Auth/Edge Functions as the backend candidate.
+- [x] Document data entities, role/access expectations, consent-first submission and security boundary.
+- [ ] Choose the exact project region after verifying current region availability, data-transfer implications and project cost.
+- [ ] Confirm the initial Auth method and pilot partner assumptions.
+- [ ] Establish Supabase CLI/local development and generate versioned migrations.
+- [ ] Implement RLS and test patient-to-patient and assigned/unassigned-clinician isolation.
+- [ ] Connect identity and the first consent-and-submit workflow.
+- [ ] Complete privacy/legal review and a DPIA where required before processing real health data.
 
-No provider API key or privileged secret should be bundled into the mobile app.
+See [Backend Architecture Proposal](BACKEND_ARCHITECTURE.md). Do not use another project's database and do not enter real patient information in the demo.
 
 ## Gate 4 — Governed AI and clinical workflow
 
