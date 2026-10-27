@@ -1,0 +1,13 @@
+import React from "react";
+import { Pressable, SafeAreaView, ScrollView, StatusBar, Switch, Text, TextInput, View } from "react-native";
+import { C } from "../theme/tokens";
+import s from "../theme/styles";
+import { BrandHeader, Btn, Card, Check, Choice, Divider, Field, Heading, Logo, Note, Status, Tag } from "../components/ui";
+import { initial, urgentCopy } from "../domain/patient";
+import { getFollowUpDestination, isConsentReady, isUrgentAnswer } from "../navigation/routes.mjs";
+import type { ScreenProps } from "./types";
+
+export function VoiceScreen(props: ScreenProps) {
+  const { d, patch, go, back, nav, shell, voicePreviewActive, setVoicePreviewActive } = props;
+  return shell("Health check", <><View style={s.progress}><View style={[s.progressBit, s.progressActive]} /><View style={s.progressBit} /><View style={s.progressBit} /><View style={s.progressBit} /><Text style={s.progressText}>1 OF 4</Text></View><Heading eyebrow="START WITH YOUR WORDS" title="What have you been experiencing?" body="Write naturally. Voice recording and automatic transcription are not connected in this demo." /><Note title="Voice preview only" body="This shows the intended voice-first interaction. It does not access your microphone or create a recording." tone="violet" /><Card><View style={s.voicePreview}><Pressable accessibilityRole="button" accessibilityLabel={voicePreviewActive ? "Stop voice interaction preview" : "Preview voice interaction"} onPress={() => setVoicePreviewActive(v => !v)} style={[s.voiceButton, voicePreviewActive && s.voiceButtonActive]}><Text style={s.voiceGlyph}>{voicePreviewActive ? "Ⅱ" : "●"}</Text></Pressable><View style={{ flex: 1 }}><Text style={[s.cardTitle, { color: C.white }]}>{voicePreviewActive ? "Listening preview" : "Speak naturally"}</Text><Text style={s.voiceCaption}>{voicePreviewActive ? "Simulated state only — no audio is recorded." : "Tap to preview the recording state, then edit your words below."}</Text></View></View>{voicePreviewActive ? <View style={s.waveWrap}>{[12,22,16,31,20,36,17,26,14,33,21,28,13,23,18,30,15].map((h, i) => <View key={i} style={[s.waveBar, { height: h, opacity: 0.7 + ((i % 3) * 0.1) }]} />)}</View> : null}</Card><Card><View style={s.inlineBetween}><Text style={s.cardTitle}>Your words</Text><Tag>EDITABLE</Tag></View><Field label="Tell us what is happening" value={d.symptoms} onChange={v => patch({ symptoms: v })} placeholder="Tell us how you feel and when it began…" multiline hint="Only enter sample or non-sensitive information in this demo." /><Btn title="Use sample response" variant="secondary" onPress={() => patch({ symptoms: initial.symptoms })} /></Card><Btn title="Continue  →" onPress={() => go("followup")} disabled={!d.symptoms.trim()} /></>);
+}

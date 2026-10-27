@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "ALIENTO",
+    "slug": "aliento",
+    "scheme": "aliento",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": {
+      "package": "com.aliento.patient"
+    },
+    "ios": {
+      "bundleIdentifier": "com.aliento.patient"
+    },
+    "extra": {
+      "demoMode": true,
+      "backendConnected": false,
+      "authenticationConnected": false,
+      "clinicalServicesConnected": false,
+      "pharmacyConnected": false,
+      "paymentsConnected": false,
+      "droneServicesConnected": false
+    }
+  }
+}
