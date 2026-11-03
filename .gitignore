@@ -25,3 +25,10 @@ coverage/
 Thumbs.db
 .idea/
 .vscode/
+
+# Android release signing and local build artifacts
+credentials.json
+*.keystore
+*.jks
+*.aab
+*.apk
