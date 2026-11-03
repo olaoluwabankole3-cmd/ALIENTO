@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import { BottomNav, Top } from "./src/components/ui";
 import { C } from "./src/theme/tokens";
 import s from "./src/theme/styles";
@@ -46,7 +46,24 @@ export default function App() {
  const [d,setD]=useState<Data>(initial);
  const patch=(value:Partial<Data>)=>setD(old=>({...old,...value}));
  const go=(next:Page)=>{setHistory(old=>[...old,page]);setPage(next);};
- const back=()=>{if(history.length){setPage(history[history.length-1]);setHistory(old=>old.slice(0,-1));}else setPage("home");};
+ const previousPage = history[history.length - 1];
+ const back = React.useCallback(() => {
+   if (previousPage) {
+     setPage(previousPage);
+     setHistory(old => old.slice(0, -1));
+   } else {
+     setPage("home");
+   }
+ }, [previousPage]);
+ useEffect(() => {
+   if (Platform.OS !== "android") return;
+   const subscription = BackHandler.addEventListener("hardwareBackPress", () => {
+     if (!previousPage && (page === "welcome" || page === "home")) return false;
+     back();
+     return true;
+   });
+   return () => subscription.remove();
+ }, [page, previousPage, back]);
  const tab=(selected:TabKey)=>{setHistory([]);setPage(getTabDestination(selected));};
  const nav=(selected:TabKey)=><BottomNav selected={selected} onSelect={tab}/>;
  const shell=(title:string,children:React.ReactNode,selected?:TabKey,dark=false)=><SafeAreaView style={[s.safe,{backgroundColor:dark?C.ink:C.canvas}]}><StatusBar barStyle={dark?"light-content":"dark-content"} backgroundColor={dark?C.ink:C.canvas}/><Top title={title} back={back} dark={dark}/><ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} contentContainerStyle={[s.content,selected&&{paddingBottom:20}]}>{children}</ScrollView>{selected?nav(selected):null}</SafeAreaView>;
