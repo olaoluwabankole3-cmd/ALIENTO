@@ -31,14 +31,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
       - run: npm ci --include=dev --no-audit --no-fund
       - run: npx expo prebuild --platform android --no-install
       # The Expo template uses a debug signing key for local release builds.
       # This standalone APK is for direct device tests only.
       - name: Build standalone tester APK
         working-directory: android
-        run: bash gradlew :app:assembleRelease --no-daemon
+        run: bash gradlew :app:assembleRelease --no-daemon --max-workers=2
       - name: Verify APK signature, package and target SDK
         shell: bash
         run: |
