@@ -1,0 +1,21 @@
+name: Care database checks
+on:
+  pull_request:
+    paths:
+      - 'supabase/**'
+      - '.github/workflows/care-database.yml'
+permissions:
+  contents: read
+jobs:
+  care-workflow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Start local Supabase Postgres and apply migrations
+        run: supabase db start
+      - name: Check consent, retries, patient and clinician access, and outcomes
+        run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/care_workflow.sql
