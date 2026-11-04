@@ -15,6 +15,7 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: latest
+          github-token: ${{ github.token }}
       - name: Start local Supabase Postgres and apply migrations
         run: supabase db start
       - name: Check consent, retries, patient and clinician access, and outcomes
