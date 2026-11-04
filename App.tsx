@@ -1,3 +1,4 @@
+import { CareProvider } from "./src/care/CareConnection";
 import React, { useEffect, useState } from "react";
 import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import { BottomNav, Top } from "./src/components/ui";
@@ -40,6 +41,9 @@ const SCREEN_BY_PAGE: Record<Page, React.ComponentType<ScreenProps>> = {
   urgent: UrgentScreen,
 };
 export default function App() {
+ return <CareProvider><PatientApp /></CareProvider>;
+}
+function PatientApp() {
  const [page,setPage]=useState<Page>("welcome");
  const [history,setHistory]=useState<Page[]>([]);
  const [voicePreviewActive,setVoicePreviewActive]=useState(false);
