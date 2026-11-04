@@ -20,6 +20,12 @@
       "pharmacyConnected": false,
       "paymentsConnected": false,
       "droneServicesConnected": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "ALIENTO — Patient Preview",
+      "shortName": "ALIENTO"
     }
   }
 }

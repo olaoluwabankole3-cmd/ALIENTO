@@ -1,6 +1,6 @@
 import { CareProvider } from "./src/care/CareConnection";
 import React, { useEffect, useState } from "react";
-import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
+import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import { BottomNav, Top } from "./src/components/ui";
 import { C } from "./src/theme/tokens";
 import s from "./src/theme/styles";
@@ -41,7 +41,13 @@ const SCREEN_BY_PAGE: Record<Page, React.ComponentType<ScreenProps>> = {
   urgent: UrgentScreen,
 };
 export default function App() {
- return <CareProvider><PatientApp /></CareProvider>;
+ return <CareProvider>{Platform.OS === "web" ? (
+   <View style={{ flex: 1, alignItems: "center", backgroundColor: "#EAF0ED" }}>
+     <View style={{ flex: 1, width: "100%", maxWidth: 520, backgroundColor: C.canvas, shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
+       <PatientApp />
+     </View>
+   </View>
+ ) : <PatientApp />}</CareProvider>;
 }
 function PatientApp() {
  const [page,setPage]=useState<Page>("welcome");
