@@ -47,7 +47,7 @@ export function CareConnection({ data }: { data?: Data }) {
   const context = useContext(Context)!;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [consent, setConsent] = useState(Boolean(context.attempt.current));
   const [cases, setCases] = useState<CareCase[]>([]);
   const [error, setError] = useState("");
   const [receipt, setReceipt] = useState("");
