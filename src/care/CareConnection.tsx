@@ -14,6 +14,9 @@ const config = {
 export const careTestingEnabled = process.env.EXPO_PUBLIC_ALIENTO_CARE_TESTING === "true";
 const client = createCareClient(config);
 type CareState = {
+  busy: boolean;
+  setBusy: React.Dispatch<React.SetStateAction<boolean>>;
+  lock: React.MutableRefObject<boolean>;
   attempt: React.MutableRefObject<{ key: string; report: object } | null>;
   session: Session | null;
   setSession: React.Dispatch<React.SetStateAction<Session | null>>;
@@ -21,8 +24,10 @@ type CareState = {
 const Context = createContext<CareState | null>(null);
 export function CareProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
+  const [busy, setBusy] = useState(false);
+  const lock = useRef(false);
   const attempt = useRef<{ key: string; report: object } | null>(null);
-  return <Context.Provider value={{ session, setSession, attempt }}>{children}</Context.Provider>;
+  return <Context.Provider value={{ session, setSession, attempt, busy, setBusy, lock }}>{children}</Context.Provider>;
 }
 // An identifier for duplicate suppression only, never an authentication credential.
 function submissionKey() {
@@ -39,9 +44,7 @@ export function CareConnection({ data }: { data?: Data }) {
   const [cases, setCases] = useState<CareCase[]>([]);
   const [error, setError] = useState("");
   const [receipt, setReceipt] = useState("");
-  const [busy, setBusy] = useState(false);
-  const lock = useRef(false);
-  const attempt = context.attempt;
+  const { busy, setBusy, lock, attempt } = context;
   const [retrying, setRetrying] = useState(Boolean(attempt.current));
   async function run(action: () => Promise<void>) {
     if (lock.current) return;
