@@ -4,7 +4,11 @@ The opt-in patient connection uses invited email/password test accounts, HTTPS a
 
 ## Setup
 
-Use a dedicated ALIENTO test project after approving its owner, region and cost. Apply the versioned migrations. A trusted administrator must register an approved fictional partner, invited patient/clinician accounts and clinician membership. Assignment remains an administrator operation in this milestone.
+The dedicated ALIENTO test project is `boihpvqsttxsvfvkjedc`, created on 2026-11-04 in Ireland (`eu-west-1`) under the confirmed organization. Supabase quoted $0/month at creation. This region was selected for fictional-data development; production hosting remains subject to review.
+
+The care_workflow migration is applied. The hosted SQL regression check passed and rolled back its fixtures. A separate fictional partner, `5a8be5e0-04b0-40ab-a5ea-e9e3d66e8a61`, is registered for ongoing testing. .env.example includes the public connection values.
+
+Invited patient/clinician accounts and clinician membership still need provisioning. Assignment remains an administrator operation in this milestone. The database advisor flags intentional authenticated SECURITY DEFINER workflow endpoints; their caller checks are covered by the regression tests. Private tables lack RLS but direct anon/authenticated table privileges were verified absent. Additional defense-in-depth review remains before production.
 
 Copy .env.example to .env, supply the dedicated project values and set EXPO_PUBLIC_ALIENTO_CARE_TESTING=true. Restart Expo with its cache cleared. These values are compiled into the bundle. Use only a publishable key.
 
