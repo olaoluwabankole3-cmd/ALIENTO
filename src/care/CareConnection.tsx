@@ -6,6 +6,13 @@ import type { Data } from "../domain/patient";
 import { createCareClient } from "./client";
 import type { CareCase, Session } from "./client";
 
+// Expo replaces these public build-time values during bundling.
+declare const process: { env: {
+  EXPO_PUBLIC_ALIENTO_URL?: string;
+  EXPO_PUBLIC_ALIENTO_PUBLISHABLE_KEY?: string;
+  EXPO_PUBLIC_ALIENTO_PARTNER_ID?: string;
+  EXPO_PUBLIC_ALIENTO_CARE_TESTING?: string;
+} };
 const config = {
   url: process.env.EXPO_PUBLIC_ALIENTO_URL || "",
   key: process.env.EXPO_PUBLIC_ALIENTO_PUBLISHABLE_KEY || "",
