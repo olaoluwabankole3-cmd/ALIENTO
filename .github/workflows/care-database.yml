@@ -20,3 +20,5 @@ jobs:
         run: supabase db start
       - name: Check consent, retries, patient and clinician access, and outcomes
         run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/care_workflow.sql
+      - name: Check coordinator assignments, isolation and clinician replies
+        run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/clinician_workspace.sql
