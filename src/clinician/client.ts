@@ -1,4 +1,3 @@
-import { createCareClient } from "../care/client";
 import type { Session } from "../care/client";
 
 export type StaffRole = { partner_id: string; staff_role: "clinician" | "coordinator" };
@@ -21,7 +20,24 @@ export type ClinicianConfig = { url: string; key: string };
 
 export function createClinicianClient(config: ClinicianConfig, transport: typeof fetch = fetch) {
   const endpoint = config.url.replace(/\/$/, "");
-  const common = createCareClient({ ...config, partner: "" }, transport);
+  async function signIn(email: string, password: string): Promise<Session> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const response = await transport(endpoint + "/auth/v1/token?grant_type=password", {
+        method: "POST", headers: { apikey: config.key, "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }), signal: controller.signal,
+      });
+      if (!response.ok) throw new Error("Sign-in failed. Check your credentials and invitation.");
+      const result = await response.json();
+      if (typeof result?.access_token !== "string" || typeof result?.user?.id !== "string")
+        throw new Error("Sign-in was not confirmed.");
+      return result as Session;
+    } catch (e) {
+      if (e instanceof Error && e.name === "AbortError") throw new Error("Sign-in timed out. Please retry.");
+      throw e;
+    } finally { clearTimeout(timeout); }
+  }
   async function rpc<T>(session: Session, functionName: string, payload: object = {}): Promise<T> {
     const allowed = ["care_staff_roles", "clinician_inbox", "coordination_queue",
       "eligible_clinicians", "assign_care_request", "respond_to_care_request"];
@@ -57,7 +73,7 @@ export function createClinicianClient(config: ClinicianConfig, transport: typeof
     return data as T[];
   }
   return {
-    signIn: common.signIn,
+    signIn,
     roles: (session: Session) => list<StaffRole>(session, "care_staff_roles"),
     clinicianInbox: (session: Session) => list<ClinicianCase>(session, "clinician_inbox"),
     coordinationQueue: (session: Session) => list<CoordinationCase>(session, "coordination_queue"),
