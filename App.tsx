@@ -1,4 +1,5 @@
 import { CareProvider } from "./src/care/CareConnection";
+import { ClinicianWorkspace } from "./src/clinician/ClinicianWorkspace";
 import React, { useEffect, useState } from "react";
 import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import { BottomNav, Top } from "./src/components/ui";
@@ -51,6 +52,7 @@ export default function App() {
    document.title = "ALIENTO — Patient Preview";
    return () => { fontLink.remove(); };
  }, []);
+ if (Platform.OS === "web" && typeof window !== "undefined" && window.location.pathname.startsWith("/clinician")) return <ClinicianWorkspace />;
  return <CareProvider>{Platform.OS === "web" ? (
    <View style={{ flex: 1, alignItems: "center", backgroundColor: "#EAF0ED" }}>
      <View style={{ flex: 1, width: "100%", maxWidth: 412, backgroundColor: C.canvas, shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
