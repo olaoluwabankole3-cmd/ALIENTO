@@ -41,9 +41,19 @@ const SCREEN_BY_PAGE: Record<Page, React.ComponentType<ScreenProps>> = {
   urgent: UrgentScreen,
 };
 export default function App() {
+ useEffect(() => {
+   if (Platform.OS !== "web" || typeof document === "undefined") return;
+   // Use the approved Manrope face in the browser without changing Android fonts.
+   const fontLink = document.createElement("link");
+   fontLink.rel = "stylesheet";
+   fontLink.href = "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap";
+   document.head.appendChild(fontLink);
+   document.title = "ALIENTO — Patient Preview";
+   return () => { fontLink.remove(); };
+ }, []);
  return <CareProvider>{Platform.OS === "web" ? (
    <View style={{ flex: 1, alignItems: "center", backgroundColor: "#EAF0ED" }}>
-     <View style={{ flex: 1, width: "100%", maxWidth: 520, backgroundColor: C.canvas, shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
+     <View style={{ flex: 1, width: "100%", maxWidth: 412, backgroundColor: C.canvas, shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
        <PatientApp />
      </View>
    </View>
