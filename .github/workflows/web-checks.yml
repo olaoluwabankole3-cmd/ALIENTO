@@ -7,7 +7,6 @@ on:
       - 'App.tsx'
       - 'src/**'
       - 'tests/**'
-      - 'tests/**'
       - 'assets/**'
       - 'web/**'
       - 'package*.json'
@@ -18,6 +17,7 @@ on:
     paths:
       - 'App.tsx'
       - 'src/**'
+      - 'tests/**'
       - 'assets/**'
       - 'web/**'
       - 'package*.json'
