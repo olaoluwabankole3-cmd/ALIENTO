@@ -6,6 +6,8 @@ on:
     paths:
       - 'App.tsx'
       - 'src/**'
+      - 'tests/**'
+      - 'tests/**'
       - 'assets/**'
       - 'web/**'
       - 'package*.json'
