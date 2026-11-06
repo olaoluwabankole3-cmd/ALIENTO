@@ -1,0 +1,43 @@
+name: Expo web design checks
+on:
+  push:
+    branches:
+      - feat/android-patient-app-20261024
+    paths:
+      - 'App.tsx'
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'web/**'
+      - 'package*.json'
+      - 'app.json'
+      - 'vercel.json'
+      - '.github/workflows/web-checks.yml'
+  pull_request:
+    paths:
+      - 'App.tsx'
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'web/**'
+      - 'package*.json'
+      - 'app.json'
+      - 'vercel.json'
+      - '.github/workflows/web-checks.yml'
+permissions:
+  contents: read
+jobs:
+  expo-web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx expo-doctor
+      - run: npx expo export --platform web

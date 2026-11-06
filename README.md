@@ -2,48 +2,62 @@
 
 **A clearer path to care.**
 
-ALIENTO is a voice-first healthcare coordination platform being designed for Android first. It aims to connect patients with qualified clinical care and licensed pharmacy workflows, with autonomous home medicine delivery as a future research and engineering milestone.
+ALIENTO is an Android-first, voice-first healthcare coordination app prototype. It helps people describe what they are experiencing, organise a patient-reported health brief and understand how a qualified professional could review their request.
 
-## Product principles
+## Current build status
 
-- Voice and text intake should let people explain how they feel in their own words.
-- AI may structure patient-reported information, ask bounded follow-up questions, translate or simplify language, and prepare a clinician-facing brief.
-- AI must not independently diagnose, prescribe, or make consequential treatment decisions.
-- Qualified clinicians remain responsible for clinical assessment and treatment decisions.
-- Prescription fulfilment must follow applicable clinical and pharmacy requirements.
-- Health information requires appropriate consent, access control, minimisation, and auditability.
-- Emergency warnings must direct people toward urgent professional help rather than treating the app as an emergency service.
-- Drone delivery is a planned concept. No real aircraft, flight-control system, camera feed, prescription service, or delivery partner is connected to this project yet. Prototype states must be visibly labelled as simulated.
+The `feat/android-patient-app-20261024` branch contains the Android-first React Native + Expo + TypeScript prototype. It uses local in-memory state and sample information only.
 
-## Current stage
+- Patient journey: welcome, home, symptom text entry, follow-up, editable health brief and consent.
+- Care coordination: simulated review status, clinician-care-plan concept and pharmacy/order previews.
+- Personal space: My Care and profile/preferences.
+- Safety: urgent-care guidance and notices about unconnected services.
+- Future concepts: delivery tracking and preferred handoff spot screens, explicitly marked as simulated.
 
-**Phase 1 — Product definition and design.** The patient experience is being designed in Figma before application implementation. The working Figma file is [ALIENTO — Android Patient](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2).
+The code is organised into 15 screen files in `src/screens/`, shared UI components in `src/components/`, theme tokens and styles in `src/theme/`, demo state/types in `src/domain/`, and testable navigation decisions in `src/navigation/`. `App.tsx` coordinates navigation and shared state. The automated navigation/safety tests are in `tests/decisions.test.mjs`.
 
-The current design direction uses deep teal, emerald and mint, Manrope typography, and a glossy sculptural 3D ALIENTO mark. Design assets and workflows are still being refined; the Figma file is the source of truth for screen layouts.
+The design source is [ALIENTO — Android Patient in Figma](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2).
 
-## Planned implementation direction
+## Run locally
 
-- Android first; iOS can follow after the initial product is validated.
-- Proposed app framework: React Native + Expo + TypeScript.
-- Backend, authentication, data model, AI providers, payments, and integrations must be confirmed before production implementation.
-- Secrets must remain server-side. The mobile app must not contain provider API keys.
-- Clinical, pharmacy, privacy, payment, and aviation workflows require qualified review and applicable approvals before launch.
+Use Node.js 22.13 or newer and npm. Use the committed lockfile for repeatable installation.
 
-## Initial patient journey
+```bash
+npm ci
+npm test
+npm run typecheck
+npm run doctor
+npx expo start
+```
 
-1. Welcome and home
-2. Voice or text intake
-3. Adaptive follow-up questions
-4. Review the structured health brief
-5. Verify account and obtain consent before saving/sharing the clinical record
-6. Clinician review and, where appropriate, consultation
-7. Clinician-approved prescription and licensed-pharmacy workflow
-8. Order confirmation and transparent price
-9. Future delivery tracking and controlled pod/drop-zone concept
-10. Post-care follow-up and patient health history
+Scan the QR code with an Expo Go installation compatible with this project's Expo SDK 57. If the installed Expo Go version targets another SDK, use the official compatible Expo Go release or a development build rather than adding individual dependencies or upgrading the SDK ad hoc. Alternatively, run `npm run android` with an Android emulator and Android development tools configured.
 
-Not every patient needs every step. A patient may need clinical assessment without medication or may need urgent in-person care.
+Useful commands:
 
-## Status
+- `npm run start` — start the Expo development server
+- `npm run android` — open in an Android emulator
+- `npm run typecheck` — run TypeScript checks
+- `npm test` — test urgent guidance, follow-up routing, tab destinations and consent gating
+- `npm run doctor` — inspect common Expo project setup issues
 
-This repository is being initialized with product documentation. It does not yet contain the application code. Implementation begins after the core design and user journeys have been reviewed.
+## Safety and privacy boundaries
+
+This is a **prototype, not a production healthcare service**. Do not enter real patient information.
+
+The app currently has no backend, real account registration, phone/OTP verification, speech-to-text, AI provider, clinician inbox, clinical decision-making, prescription service, pharmacy inventory, payment processing, live camera, drone, GPS or delivery integration. Form state is local to the running app and is not a secure medical record. Review and consent screens are illustrative and do not constitute legal consent capture.
+
+AI in the intended product may organise patient-reported information, ask bounded follow-up questions and prepare a clinician-facing brief. It must not independently diagnose, prescribe or make consequential treatment decisions. Only an appropriately qualified clinician can make clinical decisions. Medicine fulfilment must require a valid prescription and licensed-pharmacy workflow where applicable.
+
+Drone delivery and camera/drop-zone screens are visual concepts only. A patient-selected spot is a preference, never a flight-control command.
+
+## Project documents
+
+- [Product specification](docs/PRODUCT_SPEC.md)
+- [Android design specification](docs/ANDROID_DESIGN_SPEC.md)
+- [Implementation plan](docs/IMPLEMENTATION_PLAN.md)
+- [Prototype limitations](docs/PROTOTYPE_LIMITATIONS.md)
+- [Backend architecture proposal](docs/BACKEND_ARCHITECTURE.md)
+
+## Before any pilot
+
+Complete the remaining visual, accessibility and error-state QA, then the required backend, authentication, consent, authorisation, auditability, clinical and pharmacy workflows, security/privacy reviews and applicable approvals. A prototype smoke test or passing CI checks do not establish that the service is ready for real users or patient data.

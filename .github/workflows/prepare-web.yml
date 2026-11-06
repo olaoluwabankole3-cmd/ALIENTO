@@ -1,0 +1,23 @@
+name: Verify Expo dependency lockfile
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Verify types, tests and Expo compatibility
+        run: npm run typecheck && npm test && npx expo-doctor
+      - name: Build browser preview
+        run: npx expo export --platform web
