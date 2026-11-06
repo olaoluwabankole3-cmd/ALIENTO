@@ -1,4 +1,4 @@
-name: Prepare Expo web dependencies
+name: Align Expo SDK patch versions
 on:
   push:
     branches:
@@ -23,10 +23,12 @@ jobs:
           cache: npm
       - name: Install locked native dependencies
         run: npm ci --no-audit --no-fund
-      - name: Add Expo-compatible browser dependencies
-        run: npx expo install react-dom react-native-web @expo/metro-runtime --npm
-      - name: Check TypeScript
-        run: npm run typecheck
+      - name: Align Expo 57 patch versions and lockfile
+        run: npm install --save --no-audit --no-fund 'expo@~57.0.32' '@expo/metro-runtime@~57.0.18'
+      - name: Check TypeScript and app tests
+        run: npm run typecheck && npm test
+      - name: Verify Expo SDK compatibility
+        run: npx expo-doctor
       - name: Build browser preview
         run: npx expo export --platform web
       - name: Commit the updated dependency lockfile
