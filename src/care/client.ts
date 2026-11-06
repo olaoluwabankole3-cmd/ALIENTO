@@ -1,7 +1,8 @@
 export type Session = { access_token: string; user: { id: string } };
 export type CareCase = {
-  id: string; status: string; created_at: string;
-  clinical_outcomes: { response: string } | null;
+  case_id: string; submitted_at: string;
+  stage: "submitted" | "assigned" | "reviewed";
+  outcome: string | null;
 };
 export type CareConfig = { url: string; key: string; partner: string };
 export function createCareClient(config: CareConfig, transport: typeof fetch = fetch) {
@@ -41,9 +42,13 @@ export function createCareClient(config: CareConfig, transport: typeof fetch = f
       return id;
     },
     async cases(session: Session): Promise<CareCase[]> {
-      const result = await request("/rest/v1/care_requests?select=id,status,created_at,clinical_outcomes(response)&order=created_at.desc", session.access_token);
-      if (!Array.isArray(result)) throw new Error("Cases could not be loaded.");
-      return result;
+      const result = await request("/rest/v1/rpc/patient_case_progress", session.access_token, {});
+      if (!Array.isArray(result) || !result.every(item =>
+        item && typeof item.case_id === "string" && typeof item.submitted_at === "string" &&
+        ["submitted", "assigned", "reviewed"].includes(item.stage) &&
+        (item.outcome === null || typeof item.outcome === "string")))
+        throw new Error("Cases could not be loaded.");
+      return result as CareCase[];
     },
   };
 }

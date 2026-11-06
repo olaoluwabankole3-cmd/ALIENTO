@@ -25,7 +25,20 @@ const c = StyleSheet.create({
 });
 
 export function MyCareScreen({ d, go, nav, shell }: ScreenProps) {
-  if (careTestingEnabled) return shell("My care", <CareConnection />, "care");
+  if (careTestingEnabled) return <SafeAreaView style={c.safe}>
+    <StatusBar barStyle="dark-content" backgroundColor={C.canvas} />
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={c.content} showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled">
+      {Platform.OS === "web" && <View style={c.status} accessibilityElementsHidden>
+        <Text style={c.statusText}>9:41</Text><Text style={c.statusText}>◉  ▰  ◒</Text>
+      </View>}
+      <Text style={c.brand}>ALIENTO</Text>
+      <Text style={c.heading}>Your care, in one place.</Text>
+      <Text style={c.subtitle}>Health brief, review progress and replies.</Text>
+      <CareConnection showHeading={false} />
+    </ScrollView>
+    {nav("care")}
+  </SafeAreaView>;
   const items: { title: string; subtitle: string; glyph: string; page: "pending" | "pharmacy" | "order" }[] = [
     { title: "Appointments", subtitle: "No appointment confirmed yet", glyph: "◷", page: "pending" },
     { title: "Prescriptions", subtitle: "Clinician-approved items only", glyph: "◒", page: "pharmacy" },

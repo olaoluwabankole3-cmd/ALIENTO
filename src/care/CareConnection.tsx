@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import { Text, TextInput } from "react-native";
 import { Btn, Card, Check, Heading, Note } from "../components/ui";
 import s from "../theme/styles";
 import type { Data } from "../domain/patient";
 import { createCareClient } from "./client";
 import type { CareCase, Session } from "./client";
+import { PatientCareTimeline } from "./PatientCareTimeline";
 
 // Expo replaces these public build-time values during bundling.
 declare const process: { env: {
@@ -43,7 +44,7 @@ function submissionKey() {
     return (character === "x" ? value : (value & 3) | 8).toString(16);
   });
 }
-export function CareConnection({ data }: { data?: Data }) {
+export function CareConnection({ data, showHeading = true }: { data?: Data; showHeading?: boolean }) {
   const context = useContext(Context)!;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,6 +54,18 @@ export function CareConnection({ data }: { data?: Data }) {
   const [receipt, setReceipt] = useState("");
   const { busy, setBusy, lock, attempt } = context;
   const [retrying, setRetrying] = useState(Boolean(attempt.current));
+  const [loadingCases, setLoadingCases] = useState(false);
+  useEffect(() => {
+    if (data || !context.session) return;
+    let active = true;
+    setLoadingCases(true);
+    void client.cases(context.session).then(items => {
+      if (active) setCases(items);
+    }).catch(failure => {
+      if (active) setError(failure instanceof Error ? failure.message : "Could not load care status.");
+    }).finally(() => { if (active) setLoadingCases(false); });
+    return () => { active = false; };
+  }, [Boolean(data), context.session?.access_token]);
   async function run(action: () => Promise<void>) {
     if (lock.current) return;
     lock.current = true;
@@ -66,8 +79,8 @@ export function CareConnection({ data }: { data?: Data }) {
   if (!config.url.startsWith("https://") || !config.key.startsWith("sb_publishable_") || !config.partner)
     return <Note title="Care testing is awaiting setup" body="A dedicated test service must be configured before signing in or sending a fictional brief." />;
   return <>
-    <Heading eyebrow="CONNECTED TEST" title={data ? "Send a fictional brief" : "Saved care requests"}
-      body="Use an invited test account and fictional information. Your test session lasts until you close the app." />
+    {showHeading && <Heading eyebrow="CONNECTED TEST" title={data ? "Send a fictional brief" : "Saved care requests"}
+      body="Use an invited test account and fictional information. Your test session lasts until you close the app." />}
     {!context.session ? <Card>
       <Text style={s.fieldLabel}>TEST ACCOUNT EMAIL</Text>
       <TextInput accessibilityLabel="Test account email" value={email} onChangeText={setEmail}
@@ -100,11 +113,14 @@ export function CareConnection({ data }: { data?: Data }) {
         {retrying && <Text style={s.hint}>A retry sends the original brief with the same reference. Keep this screen open until the result is confirmed.</Text>}
       </>}
       {receipt && <Note title="Saved successfully" body={"Case reference: " + receipt + ". Open My Care to check for a response."} />}
-      <Btn title={busy ? "Please wait…" : "Refresh saved cases"} disabled={busy} onPress={() => { void run(refresh); }} />
-      {cases.map(item => <Card key={item.id}>
-        <Text style={s.cardTitle}>{item.status === "reviewed" ? "Response available" : "Awaiting review"}</Text>
-        <Text selectable style={s.hint}>{item.id}</Text>
-        <Text style={s.cardBody}>{item.clinical_outcomes?.response || "No response has been recorded yet."}</Text>
+      {!data && <PatientCareTimeline cases={cases} busy={busy || loadingCases}
+        onRefresh={() => { void run(refresh); }} />}
+      {data && <Btn title={busy ? "Please wait…" : "Refresh saved cases"} disabled={busy}
+        onPress={() => { void run(refresh); }} />}
+      {data && cases.map(item => <Card key={item.case_id}>
+        <Text style={s.cardTitle}>{item.stage === "reviewed" ? "Response available" : item.stage === "assigned" ? "Assigned for review" : "Awaiting assignment"}</Text>
+        <Text selectable style={s.hint}>{item.case_id}</Text>
+        <Text style={s.cardBody}>{item.outcome || "No response has been recorded yet."}</Text>
       </Card>)}
       <Btn title="Sign out of this device" variant="outline" disabled={busy} onPress={() => {
         context.setSession(null); setCases([]); setReceipt(""); setConsent(false);
