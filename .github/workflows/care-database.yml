@@ -24,3 +24,5 @@ jobs:
         run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/clinician_workspace.sql
       - name: Verify patient to clinician to patient round trip
         run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/patient_care_progress.sql
+      - name: Verify clinician revocation and safely audited reassignment
+        run: psql postgresql://postgres:postgres@127.0.0.1:54322/postgres -X -v ON_ERROR_STOP=1 -f supabase/checks/staff_reassignment.sql
