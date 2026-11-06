@@ -1,42 +1,23 @@
-name: Align Expo SDK patch versions
+name: Verify Expo dependency lockfile
 on:
-  push:
-    branches:
-      - feat/android-patient-app-20261024
-    paths:
-      - vercel.json
-      - .github/workflows/prepare-web.yml
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  prepare-web:
+  verify-dependencies:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
-      - name: Install locked native dependencies
+      - name: Install pinned dependencies
         run: npm ci --no-audit --no-fund
-      - name: Align Expo 57 patch versions and lockfile
-        run: npm install --save --no-audit --no-fund 'expo@~57.0.32' '@expo/metro-runtime@~57.0.18'
-      - name: Check TypeScript and app tests
-        run: npm run typecheck && npm test
-      - name: Verify Expo SDK compatibility
-        run: npx expo-doctor
+      - name: Verify types, tests and Expo compatibility
+        run: npm run typecheck && npm test && npx expo-doctor
       - name: Build browser preview
         run: npx expo export --platform web
-      - name: Commit the updated dependency lockfile
-        run: |
-          if ! git diff --quiet -- package.json package-lock.json; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add package.json package-lock.json
-            git commit -m "chore: lock compatible Expo browser dependencies"
-            git push origin HEAD:feat/android-patient-app-20261024
-          fi
