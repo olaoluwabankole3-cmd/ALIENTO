@@ -111,7 +111,9 @@ export function ClinicianWorkspace() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [demo, setDemo] = useState(false);
+  const [demo, setDemo] = useState(() => Platform.OS === "web" &&
+    typeof window !== "undefined" &&
+    new URLSearchParams(window.location.search).get("demo") === "1");
   const clinicianRole = demo || roles.some(r => r.staff_role === "clinician");
   const coordinatorRole = demo || roles.some(r => r.staff_role === "coordinator");
   const displayedCases = demo ? sampleCases : cases;

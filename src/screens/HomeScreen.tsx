@@ -54,11 +54,11 @@ export function HomeScreen({ d, go, nav }: ScreenProps) {
       </View>
       <Pressable accessibilityRole="button" accessibilityLabel="Start a health check" onPress={() => go("voice")} style={h.hero}>
         <View style={h.orb} /><View style={h.orbSmall} />
-        <Text style={h.heroGreeting}>Good morning.</Text>
+        <Text style={h.heroGreeting}>Welcome.</Text>
         <Text style={h.heroTitle}>How does your{"\n"}body feel today?</Text>
-        <Text style={h.heroBody}>Speak naturally. ALIENTO prepares a clear brief for clinician review.</Text>
+        <Text style={h.heroBody}>Describe what you feel. Explore a sample brief with no recording or diagnosis.</Text>
         <View style={h.emblem}><Logo size={122} /></View>
-        <Text style={h.heroCta}>Tap to speak</Text>
+        <Text style={h.heroCta}>Try health check</Text>
         <Text style={h.languages}>{d.language === "Pidgin" ? "Pidgin • English" : "English • Pidgin"}</Text>
       </Pressable>
       <Pressable accessibilityRole="button" accessibilityLabel="View urgent help guidance" onPress={() => go("urgent")} style={h.emergency}>

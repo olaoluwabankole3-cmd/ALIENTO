@@ -1,7 +1,8 @@
 import { CareProvider } from "./src/care/CareConnection";
 import { ClinicianWorkspace } from "./src/clinician/ClinicianWorkspace";
+import { WebShowcase } from "./src/components/WebShowcase";
 import React, { useEffect, useState } from "react";
-import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar, View } from "react-native";
+import { BackHandler, Platform, SafeAreaView, ScrollView, StatusBar, View, useWindowDimensions } from "react-native";
 import { BottomNav, Top } from "./src/components/ui";
 import { C } from "./src/theme/tokens";
 import s from "./src/theme/styles";
@@ -42,6 +43,13 @@ const SCREEN_BY_PAGE: Record<Page, React.ComponentType<ScreenProps>> = {
   urgent: UrgentScreen,
 };
 export default function App() {
+ const { width } = useWindowDimensions();
+ const [showcaseStart, setShowcaseStart] = useState<Page>("home");
+ const [showcaseVersion, setShowcaseVersion] = useState(0);
+ const startPatientJourney = () => {
+   setShowcaseStart("voice");
+   setShowcaseVersion(v => v + 1);
+ };
  useEffect(() => {
    if (Platform.OS !== "web" || typeof document === "undefined") return;
    // Use the approved Manrope face in the browser without changing Android fonts.
@@ -54,15 +62,22 @@ export default function App() {
  }, []);
  if (Platform.OS === "web" && typeof window !== "undefined" && window.location.pathname.startsWith("/clinician")) return <ClinicianWorkspace />;
  return <CareProvider>{Platform.OS === "web" ? (
-   <View style={{ flex: 1, alignItems: "center", backgroundColor: "#EAF0ED" }}>
-     <View style={{ flex: 1, width: "100%", maxWidth: 412, backgroundColor: C.canvas, shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
-       <PatientApp />
+   width >= 1180 ? (
+     <WebShowcase onStartHealthCheck={startPatientJourney}>
+       <PatientApp key={showcaseVersion} startPage={showcaseStart} />
+     </WebShowcase>
+   ) : (
+     <View style={{ flex: 1, alignItems: "center", backgroundColor: C.canvas }}>
+       <View style={{ flex: 1, width: "100%", maxWidth: 412, backgroundColor: C.canvas,
+         shadowColor: C.ink, shadowOpacity: 0.12, shadowRadius: 20, shadowOffset: { width: 0, height: 4 } }}>
+         <PatientApp />
+       </View>
      </View>
-   </View>
+   )
  ) : <PatientApp />}</CareProvider>;
 }
-function PatientApp() {
- const [page,setPage]=useState<Page>("welcome");
+function PatientApp({ startPage = "welcome" }: { startPage?: Page }) {
+ const [page,setPage]=useState<Page>(startPage);
  const [history,setHistory]=useState<Page[]>([]);
  const [voicePreviewActive,setVoicePreviewActive]=useState(false);
  const [d,setD]=useState<Data>(initial);
