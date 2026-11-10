@@ -1,96 +1,100 @@
 # ALIENTO — Implementation Plan
 
-**Current phase:** Phase 1 — product definition and design  
-**Implementation status:** Not started  
-**Repository:** `olaoluwabankole3-cmd/ALIENTO`
+**Platform:** Android first, iOS later  
+**App framework:** React Native + Expo + TypeScript  
+**Implementation branch:** `feat/android-patient-app-20261024`  
+**Current milestone:** Modular Android prototype; the original UI passed the user's first device smoke test, and the refactor has passed automated checks. Device re-test after the refactor is next.
 
-## Gate 0 — Product and design agreement
+## Gate 0 — Design agreement and first device pass
 
-Before coding the app:
-- Review and approve the patient journey in the [Figma design](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2).
-- Finish visual QA for all 14 patient artboards.
-- Audit and correct all clickable prototype interactions, including back navigation and bottom navigation.
-- Finalise the consent, identity verification, clinical-review and no-prescription branches.
-- Confirm the selected 3D logo and export production-ready application assets.
-- Review key journeys with prospective users and, where possible, qualified clinical/pharmacy advisors.
+- [x] User approved the current visual direction and patient screen designs.
+- [x] Core journeys and safety requirements documented.
+- [x] Approved 3D logo included as a local asset.
+- [x] User launched the original prototype on an Android phone using an Expo Go version compatible with SDK 57.
+- [x] User reports completing the core journey smoke-test checklist on that build, including navigation, text editing, urgent guidance, consent screens, care-plan/order previews, profile screens, keyboard behaviour and checking for stuck buttons.
+- [x] The existing screen markup and shared styles have been moved into separate modules on the feature branch without intentional visual redesign.
+- [ ] Re-open the refactored branch on the Android device and repeat the same journey checklist.
+- [ ] Review visual fidelity against the full 14-screen Figma file.
+- [ ] Complete a separate accessibility, contrast, small-screen and screen-reader review.
+- [ ] Test additional error, empty and interrupted states systematically.
 
-**Exit criterion:** A reviewer can follow the primary patient journey in Figma without dead ends or misleading status changes.
+**Design source:** [ALIENTO — Android Patient in Figma](https://www.figma.com/design/ITcHMZilZaSAOSlhXSSGQA?node-id=9-2)
 
 ## Gate 1 — Mobile app foundation
 
-Proposed stack: React Native + Expo + TypeScript, pending confirmation at implementation time.
+The app is now organised into:
+- `src/screens/` — 15 screen files for the patient journeys
+- `src/components/ui.tsx` — shared buttons, cards, tags, notes, fields, navigation elements and other reusable UI
+- `src/theme/tokens.ts` and `src/theme/styles.ts` — shared colours and style definitions
+- `src/domain/patient.ts` — page/data types and illustrative demo state
+- `src/navigation/routes.mjs` and its TypeScript declaration — testable urgent-guidance, follow-up, tab-navigation and consent decisions
+- `App.tsx` — central navigation state and screen composition
+- `tests/decisions.test.mjs` — automated checks for urgent-routing, tab destinations and consent gating
 
-Work:
-- Initialise Expo project with strict TypeScript and predictable folder structure.
-- Configure linting, formatting, environment validation and type-check/build scripts.
-- Implement design tokens and typography from the approved Figma design.
-- Build shared mobile primitives: buttons, inputs, status labels, cards, navigation and voice-interaction states.
-- Add accessible sizing, safe-area behaviour, keyboard handling and responsive layouts.
-- Add an explicit demo-mode flag so simulated workflows cannot be mistaken for live services.
+GitHub Actions has passed for the latest code refactor:
+- Clean locked dependency installation (`npm ci`)
+- TypeScript check
+- Focused navigation and safety decision tests
+- Android JavaScript export
+- Expo project diagnostics
 
-Acceptance:
-- Android development build launches successfully.
-- Main screens render from reusable components, not duplicated hard-coded styling.
-- No live provider secret is bundled in the mobile app.
+The passing checks verify code and bundle consistency, but they do not replace a device re-test, visual comparison, accessibility audit or release build.
 
-## Gate 2 — Patient experience (demo data)
+Next:
+- Verify the refactored code on the same Android device.
+- Preserve the approved design while comparing all 14 Figma screens.
+- Expand tests around navigation history and error/empty states.
+- Review accessibility labels, contrast, keyboard behaviour and responsive layouts.
 
-Build in this order:
-1. Welcome, entry and language preferences
-2. Voice/text intake UI, transcript editing and simulated listening states
-3. Follow-up questions and red-flag presentation
-4. Editable health brief
-5. Account verification UI and explicit consent
-6. Clinical request status
-7. Clinician-led consultation/care-plan concept
-8. Prescription and pharmacy order concepts
-9. Order review and price transparency
-10. Simulated future drone tracking and drop-zone selection
-11. My Care, profile and privacy preferences
+A standalone Android release build, production backend, security assessment and comprehensive accessibility review have **not** been completed.
 
-Acceptance:
-- Each primary action has a meaningful destination and loading/error/empty states.
-- Demo content is clearly labelled.
-- No screen claims that a real clinician, pharmacy, payment, camera or drone is connected unless that integration exists.
+## Gate 2 — Patient experience with demo data
 
-## Gate 3 — Backend and identity design
+- [x] Welcome and home
+- [x] Text intake screen with editable sample transcript
+- [x] Follow-up questions and safety-warning path
+- [x] Editable patient-reported health brief
+- [x] Account details and explicit consent UI
+- [x] Simulated clinical-review state
+- [x] Consultation/care-plan concept with no-medicine route
+- [x] Prescription/pharmacy concept and order review
+- [x] Simulated delivery tracking and preferred handoff spot concept
+- [x] My Care and profile/preferences
+- [x] First user-reported Android device smoke test of the original prototype's core patient journeys, navigation and keyboard/button behaviour
+- [ ] Repeat the device smoke test against the refactored build
+- [ ] Detailed visual comparison, accessibility review and systematic error/empty-state testing
 
-Choose architecture only after product requirements and available partner constraints are reviewed.
+All screens above are prototype UI only. A button or status screen does not mean a service is connected.
 
-Potential work:
-- Authentication, identity verification and consent receipts
-- Database model and per-user/role authorisation
-- Patient records, case/workflow status, clinician review, prescription and pharmacy order references
-- Audit events for sensitive access and consequential actions
-- Server-side AI gateway with schema validation, request limits, red-flag handling and provider abstraction
-- Secure object storage and retention/deletion policy
+## Gate 3 — Product backend and identity
 
-Acceptance:
-- Row-level or equivalent authorisation tests prove one patient cannot access another patient's records.
-- Clinical and pharmacy roles can only access their authorised workflows.
-- Secrets and privileged calls remain server-side.
-- AI outputs are schema-validated and labelled as support for—not a replacement for—clinical decisions.
+**Current status:** Architecture proposal documented; no ALIENTO Supabase project or live backend has been created or connected.
 
-## Gate 4 — Clinical and pharmacy pilot readiness
+- [x] Propose Supabase Postgres/Auth/Edge Functions as the backend candidate.
+- [x] Document data entities, role/access expectations, consent-first submission and security boundary.
+- [ ] Choose the exact project region after verifying current region availability, data-transfer implications and project cost.
+- [ ] Confirm the initial Auth method and pilot partner assumptions.
+- [ ] Establish Supabase CLI/local development and generate versioned migrations.
+- [ ] Implement RLS and test patient-to-patient and assigned/unassigned-clinician isolation.
+- [ ] Connect identity and the first consent-and-submit workflow.
+- [ ] Complete privacy/legal review and a DPIA where required before processing real health data.
 
-- Secure review by qualified clinicians and pharmacy partners
-- Operational policies for consultation, prescription validity, dispensing, unavailable stock, substitutions, follow-up, complaints and refunds
-- Required privacy, data protection and health-sector compliance assessment
-- Incident response, audit review and support processes
-- Small controlled partner pilot before broader availability
+See [Backend Architecture Proposal](BACKEND_ARCHITECTURE.md). Do not use another project's database and do not enter real patient information in the demo.
 
-## Gate 5 — Drone R&D and integration
+## Gate 4 — Governed AI and clinical workflow
 
-This is a separate engineering stream and a later launch dependency:
-- Define aircraft and secure-pod payload requirements
-- Research eligible hardware and authorised delivery partners
-- Develop the operator integration contract and mission-state model
-- Design target-selection, camera privacy, stale-stream handling, reject/redirect and failed-handoff flows
-- Conduct simulation and controlled testing with appropriate expertise and approvals
-- Integrate only after a real operator, API and approved operating model are identified
+Not started. AI may organise patient-reported information, ask bounded follow-up questions, translate/simplify language and prepare a clinician-facing brief. It must not independently diagnose, prescribe or make consequential treatment decisions.
 
-The drone must retain independent safety controls; a patient-selected point is a preferred destination, not a command to pilot or descend.
+A qualified clinician must own assessment and care decisions. Emergency warnings must not be presented as a diagnosis or a substitute for urgent in-person care. Appointment requests remain pending until a provider confirms them.
 
-## Gate 6 — Launch readiness
+## Gate 5 — Licensed pharmacy, payment and fulfilment
 
-Launch only after the product, clinical and pharmacy operations, data protection controls, payment fulfilment and delivery operating model are validated for the intended region. A visual prototype or hackathon demo is not launch authorisation.
+Not started. Real fulfilment requires the applicable prescription validation and licensed-pharmacy workflow, availability and final price confirmation, order-state handling, payment reconciliation and exception/refund processes. Patients must not be pressured into buying medicine.
+
+## Gate 6 — Future delivery research
+
+The delivery tracking and camera/drop-zone screens remain simulated concepts. No aircraft, live camera, GPS or operator is connected. Any real drone work is a separate future engineering and approval workstream. A patient-selected location is a preferred target, not a flight or descent command; independent operator and safety controls must decide whether delivery can proceed.
+
+## Gate 7 — Pilot and launch readiness
+
+No production pilot is authorised by this prototype. Before a pilot: complete product and accessibility QA, qualified clinical/pharmacy review, data-protection/security assessment, support/incident procedures, integrations testing and required local approvals. Use a limited controlled pilot only after the real workflow is validated.

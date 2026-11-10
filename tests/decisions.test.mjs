@@ -1,0 +1,6 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { getFollowUpDestination, getTabDestination, isConsentReady, isUrgentAnswer } from "../src/navigation/routes.mjs";
+test("severe and uncertain answers route to urgent guidance",()=>{assert.equal(isUrgentAnswer("Yes"),true);assert.equal(isUrgentAnswer("Not sure"),true);assert.equal(isUrgentAnswer("No"),false);assert.equal(getFollowUpDestination("Yes"),"urgent");assert.equal(getFollowUpDestination("Not sure"),"urgent");assert.equal(getFollowUpDestination("No"),"summary");});
+test("bottom navigation targets the intended patient pages",()=>{assert.equal(getTabDestination("home"),"home");assert.equal(getTabDestination("care"),"mycare");assert.equal(getTabDestination("orders"),"order");assert.equal(getTabDestination("you"),"profile");});
+test("consent requires valid details and both confirmations",()=>{assert.equal(isConsentReady("Ada Patient","080-1234-5678",true,true),true);assert.equal(isConsentReady("A","08012345678",true,true),false);assert.equal(isConsentReady("Ada Patient","12345",true,true),false);assert.equal(isConsentReady("Ada Patient","08012345678",false,true),false);assert.equal(isConsentReady("Ada Patient","08012345678",true,false),false);});
